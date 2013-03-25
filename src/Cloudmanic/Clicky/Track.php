@@ -10,13 +10,13 @@ namespace Cloudmanic\Clicky;
 
 class Track
 {
-	private $_site_id;
-	private $_sitekey_admin;
-	private $_actions = array('pageview', 'download', 'outbound', 'click', 'custom', 'goal');
-	private $_api_url = 'http://in.getclicky.com/in.php';
-	private $_auth_params = '';
-	private $_request_params = '';
-	private $_last_request = '';
+	private static $_site_id;
+	private static $_sitekey_admin;
+	private static $_actions = array('pageview', 'download', 'outbound', 'click', 'custom', 'goal');
+	private static $_api_url = 'http://in.getclicky.com/in.php';
+	private static $_auth_params = '';
+	private static $_request_params = '';
+	private static $_last_request = '';
 	
 	//
 	// Set clicky configs.
@@ -28,9 +28,9 @@ class Track
 			die('Clicky: Must have the site_id and sitekey_admin set in the clicky.php file.');
 		}
 	
-		$this->_site_id = $site_id;
-		$this->_sitekey_admin = $sitekey_admin;
-		$this->_auth_params = '?site_id=' . $this->_site_id . '&sitekey_admin=' . $this->_sitekey_admin;
+		self::$_site_id = $site_id;
+		self::$_sitekey_admin = $sitekey_admin;
+		self::$_auth_params = '?site_id=' . self::$_site_id . '&sitekey_admin=' . self::$_sitekey_admin;
 	}
 	
 	// ------------------- Setters --------------------- //
@@ -48,7 +48,7 @@ class Track
 		// Custom data, must come in as array of key=>values
 		foreach($data AS $key => $row) 
 		{
-			$this->_request_params .= "&custom[" . urlencode($key) . "]=" . urlencode($row);
+			self::$_request_params .= "&custom[" . urlencode($key) . "]=" . urlencode($row);
 		}
 	}
 
@@ -61,7 +61,7 @@ class Track
 	{
 		if(is_numeric($goal)) 
 		{
-		  $this->_request_params .= "&goal[id]=$goal";
+		  self::$_request_params .= "&goal[id]=$goal";
 		  return true;
 		} 
 		  
@@ -74,7 +74,7 @@ class Track
 			
 			foreach($goal AS $key => $row) 
 			{
-				$this->_request_params .= "&goal[" . urlencode($key) . "]=" . urlencode($row);
+				self::$_request_params .= "&goal[" . urlencode($key) . "]=" . urlencode($row);
 			}
 		}
 	}
@@ -96,7 +96,7 @@ class Track
 			show_error('Clicky: Not a valid IP address.');
 		}
 		
-		$this->_request_params .= "&ip_address=$ip";
+		self::$_request_params .= "&ip_address=$ip";
 	}
 
 	//
@@ -110,7 +110,7 @@ class Track
 			show_error('Clicky: Not a valid session id must be a numberic.');
 		}
 		
-		$this->_request_params .= "&session_id=$session";
+		self::$_request_params .= "&session_id=$session";
 	}
 	
 	//
@@ -118,7 +118,7 @@ class Track
 	//
 	public static function set_refer($ref)
 	{
-		$this->_request_params .= '&ref=' . urlencode($ref);
+		self::$_request_params .= '&ref=' . urlencode($ref);
 	}
 	
 	//
@@ -126,7 +126,7 @@ class Track
 	//
 	public static function set_user_agent($ua)
 	{
-		$this->_request_params .= '&ua=' . urlencode($ua);
+		self::$_request_params .= '&ua=' . urlencode($ua);
 	}
 
 	//
@@ -134,7 +134,7 @@ class Track
 	//
 	public static function set_href($href)
 	{
-		$this->_request_params .=  "&href=" . urlencode($href);
+		self::$_request_params .=  "&href=" . urlencode($href);
 	}
 	
 	//
@@ -142,7 +142,7 @@ class Track
 	//
 	public static function set_title($title)
 	{
-		$this->_request_params .=  "&title=" . urlencode($title);
+		self::$_request_params .=  "&title=" . urlencode($title);
 	}
 	
 	// ------------------- Get Data -------------------- //
@@ -152,7 +152,7 @@ class Track
 	//
 	public static function get_last_request()
 	{
-		return $this->_last_request;
+		return self::$_last_request;
 	}
 
 	// ------------------- Request Functions ----------- //
@@ -166,22 +166,22 @@ class Track
 	public static function log_action($type)
 	{		
 		// If we did not pass in the correct type we default to a "pageview".
-		if(! in_array($type, $this->_actions))
+		if(! in_array($type, self::$_actions))
 		{
 			return false;
 		}
 		
-		$this->_last_request = $this->_api_url . $this->_auth_params . $this->_request_params . "&type=" . $type;
+		self::$_last_request = self::$_api_url . self::$_auth_params . self::$_request_params . "&type=" . $type;
 		
-		return file_get_contents($this->_last_request) ? true : false;
+		return file_get_contents(self::$_last_request) ? true : false;
 	}
 	
 	// 
 	// Clear all request vars.
 	//
-	function clear()
+	public static function clear()
 	{
-		$this->_request_params = '';
+		self::$_request_params = '';
 	}
 }
 

@@ -13,7 +13,7 @@ class Track
 	private static $_site_id;
 	private static $_sitekey_admin;
 	private static $_actions = array('pageview', 'download', 'outbound', 'click', 'custom', 'goal');
-	private static $_api_url = 'http://in.getclicky.com/in.php';
+	private static $_api_url = 'https://in.getclicky.com/in.php';
 	private static $_auth_params = '';
 	private static $_request_params = '';
 	private static $_last_request = '';

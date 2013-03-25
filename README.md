@@ -1,6 +1,6 @@
 ## Overview
 
-A Codeigniter package for speaking to http://getclicky.com
+A PHP composer based package for speaking to http://getclicky.com
 
 
 ## Requirements

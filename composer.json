@@ -1,0 +1,9 @@
+{
+    "name": "cloudmanic/clicky",
+    
+    "version": "1.0.0",
+    
+    "autoload": {
+	    "psr-0": { "Cloudmanic\\Clicky": "src/" }
+    }
+}
